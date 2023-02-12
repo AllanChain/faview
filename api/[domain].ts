@@ -7,6 +7,7 @@ import {
   Icon
 } from '../faview/extract'
 import { fetchDocument, fetchOpenSearch } from '../faview/fetcher'
+import knownSearches from '../faview/known-searches.json'
 
 interface PreviewInfo {
   domain: string
@@ -45,6 +46,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         previewInfo.search = template
       }
     }
+  } else if (domain in knownSearches) {
+    previewInfo.search = knownSearches[domain as keyof typeof knownSearches]
   }
 
   res.setHeader('Cache-Control', 's-maxage=8640000')

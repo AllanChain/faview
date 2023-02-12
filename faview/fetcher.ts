@@ -15,10 +15,10 @@ export const fetcher = axios.create({
 export const fetchDocument = async (url: string): Promise<null | CheerioAPI> => {
   try {
     const response = await fetcher.get(url)
-    if (response.status !== 200) return null
-    if (!response.data || typeof response.data !== 'string') return null
+    console.log(response.data)
     return load(response.data)
-  } catch {
+  } catch (e) {
+    console.error(e)
     return null
   }
 }
