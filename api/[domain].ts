@@ -15,17 +15,17 @@ interface PreviewInfo {
   search?: string
 }
 
-export default async function handler(request: VercelRequest, response: VercelResponse) {
-  const { domain, useSecure } = request.query
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const { domain, useSecure } = req.query
   if (Array.isArray(domain)) {
-    return response.status(400).json({
+    return res.status(400).json({
       error: 'need exactly 1 domains'
     })
   }
   const url = `${useSecure === 'false' ? 'http' : 'https'}://${domain}/`
   const document = await fetchDocument(url)
   if (document === null) {
-    return response.status(504).json({
+    return res.status(504).json({
       error: 'fail to fetch'
     })
   }
@@ -46,5 +46,6 @@ export default async function handler(request: VercelRequest, response: VercelRe
     }
   }
 
-  response.status(200).json(previewInfo)
+  res.setHeader('Cache-Control', 's-maxage=8640000')
+  res.status(200).json(previewInfo)
 }
