@@ -16,6 +16,7 @@ interface PreviewInfo {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   const { domain, useSecure } = req.query
   if (Array.isArray(domain)) {
     return res.status(400).json({
